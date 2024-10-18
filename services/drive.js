@@ -98,13 +98,15 @@ module.exports = {
     return data;
   },
 
-  async list(driveId, listParams = {}) {
+  async list(driveId, pageToken = null, pageSize = 5, listParams = {}) {
     await this.autoSetAccount();
-    const res = await drive.files.list({
-      driveId,
+    const {data} = await this.drive.files.list({
+      q: `'${driveId}' in parents and trashed=false`,
+      pageSize,
+      pageToken,
       ...listParams
     });
-    return res;
+    return data;
   },
 
   async export(fileUrl, mimeType ='application/pdf') {

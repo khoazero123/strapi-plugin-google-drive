@@ -36,8 +36,12 @@ module.exports = {
     if (!account) {
       return ctx.badRequest(`Not found any ${type} account! Please add one.`);
     }
-    const token = await strapi.plugins['google-drive'].services.drive.getAccessToken(type);
-    ctx.body = {access_token: token};
+    try {
+      const token = await strapi.plugins['google-drive'].services.drive.getAccessToken(type);
+      ctx.body = {access_token: token};
+    } catch ({message, response}) {
+      return ctx.badRequest(`${response?.data?.error || message}`);
+    }
   },
 
   redeem: async (ctx) => {
