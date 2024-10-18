@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "info": {
+    "name": "client"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "project_id": {
+      "type": "string"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "client_secret": {
+      "type": "string"
+    },
+    "redirect_uri": {
+      "type": "string",
+      "default": "urn:ietf:wg:oauth:2.0:oob"
+    },
+    "status": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

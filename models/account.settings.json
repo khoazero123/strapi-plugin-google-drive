@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "info": {
+    "name": "account",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "password": {
+      "type": "string"
+    },
+    "token": {
+      "type": "json"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "upload",
+        "download"
+      ],
+      "required": true
+    },
+    "scopes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "boolean",
+      "default": true
+    },
+    "client": {
+      "plugin": "google-drive",
+      "model": "client"
+    }
+  }
+}

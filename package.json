@@ -1,0 +1,36 @@
+{
+  "name": "strapi-plugin-google-drive",
+  "version": "1.0.3",
+  "description": "Add service for upload file to Google Drive",
+  "strapi": {
+    "name": "google-drive",
+    "icon": "plug",
+    "description": "Add service for upload file to Google Drive"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "googleapis": "^68.0.0",
+    "mime": "^2.5.2",
+    "p-limit": "^3.1.0",
+    "p-progress": "^0.5.0",
+    "strapi-provider-upload-google-drive": "*",
+    "stream-throttle": "^0.1.3"
+  },
+  "author": {
+    "name": "KhoaZero123",
+    "email": "khoazero123@gmail.com",
+    "url": "https://github.com/khoazero123"
+  },
+  "maintainers": [
+    {
+      "name": "KhoaZero123",
+      "email": "khoazero123@gmail.com",
+      "url": "https://github.com/khoazero123"
+    }
+  ],
+  "engines": {
+    "node": ">=10.16.0 <=14.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

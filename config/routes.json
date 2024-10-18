@@ -1,0 +1,34 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "google-drive.index",
+      "config": {}
+    },
+    {
+      "method": "GET",
+      "path": "/clients",
+      "handler": "google-drive.findClient",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/",
+      "handler": "google-drive.redeem",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accesstoken",
+      "handler": "google-drive.getAccessToken",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
