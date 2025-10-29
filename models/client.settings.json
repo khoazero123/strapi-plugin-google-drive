@@ -13,14 +13,17 @@
       "type": "string"
     },
     "client_id": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "client_secret": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "redirect_uri": {
       "type": "string",
-      "default": "urn:ietf:wg:oauth:2.0:oob"
+      "default": "http://<your-domain>/admin/plugins/google-drive/callback",
+      "required": true
     },
     "status": {
       "type": "boolean",

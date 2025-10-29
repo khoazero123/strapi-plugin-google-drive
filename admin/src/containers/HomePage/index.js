@@ -26,6 +26,7 @@ const HomePage = () => {
   const [code, setCode] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOauthSuccess, setIsOauthSuccess] = useState(false);
   const typeScopes = {
     upload: [
       'https://www.googleapis.com/auth/userinfo.email',
@@ -69,14 +70,14 @@ const HomePage = () => {
     setCurrentRow(null);
   };
 
-  const handleClickConnect = async () => {
+  const handleClickConnect = async (_code) => {
     setIsLoading(true);
     try {
       const data = await request(`/google-drive`, {
         method: 'POST',
         body: {
           ...currentRow,
-          code
+          code: _code || code,
         },
       });
       handleClickToggleModal();
@@ -95,15 +96,37 @@ const HomePage = () => {
 
   const generateAuthUrl = ({ scopeType: _scopeType, ...client }) => {
     const SCOPES = typeScopes[_scopeType || scopeType];
-
+    const state = {
+      clientId: client.id,
+    };
+    const stateBase64 = Buffer.from(JSON.stringify(state)).toString('base64');
     const _authUrl = 'https://accounts.google.com/o/oauth2/v2/auth' + '?' + querystring.stringify({
       response_type: 'code',
       client_id: client.client_id,
       redirect_uri: client.redirect_uri || 'urn:ietf:wg:oauth:2.0:oob',
+      state: stateBase64,
       scope: SCOPES.join(' '),
     });
     setAuthUrl(_authUrl);
     return _authUrl;
+  };
+
+  const handleLoginWithGoogle = () => {
+    const authWindow = window.open(authUrl);
+
+    // Lắng nghe message từ tab con
+    window.addEventListener("message", (event) => {
+      // Kiểm tra nguồn (bảo mật)
+      // if (event.origin !== "http://localhost:1337") return;
+      const { data } = event;
+      if (data?.type === "OAUTH_SUCCESS") {
+        console.log("data", data);
+        console.log("Token nhận được:", data.code);
+        setCode(data.code);
+        handleClickConnect(data.code);
+        setIsOauthSuccess(true);
+      }
+    });
   };
 
   return (
@@ -159,9 +182,14 @@ const HomePage = () => {
             value={scopeType}
           />
         </Padded>
-        {authUrl && (<Padded left right bottom size="lg">
+        {!isOauthSuccess && authUrl && (<Padded left right bottom size="lg">
           <Text>
-            Click on <a href={authUrl} target="_blank">this link</a> to get redeem code. Then paste the code on input below.
+            <button onClick={handleLoginWithGoogle} style={{ backgroundColor: 'blue', color: 'white', padding: '10px 20px', borderRadius: '5px' }}>Login with Google</button>
+          </Text>
+        </Padded>)}
+        {isOauthSuccess && (<Padded left right bottom size="lg">
+          <Text>
+            <span>Oauth success, you can close this modal and start <a href="/admin/plugins/drive-import">import</a> files from Google Drive</span>
           </Text>
         </Padded>)}
         <Padded left right bottom size="lg">
@@ -173,6 +201,7 @@ const HomePage = () => {
             placeholder="redeem code"
             type="text"
             value={code}
+            disabled={isOauthSuccess}
           />
         </Padded>
         <ModalFooter>
@@ -181,9 +210,16 @@ const HomePage = () => {
               Cancel
             </Button>
 
-            <Button type="button" color="success" disabled={!code || isLoading} onClick={handleClickConnect}>
-              Redeem
-            </Button>
+            {!isOauthSuccess && (
+              <Button type="button" color="success" disabled={!code || isLoading} onClick={handleClickConnect}>
+                Redeem
+              </Button>
+            )}
+            {isOauthSuccess && (
+              <Button type="button" color="success" disabled={isLoading} onClick={handleClickToggleModal}>
+                Close
+              </Button>
+            )}
           </section>
         </ModalFooter>
       </Modal>
