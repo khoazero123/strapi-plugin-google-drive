@@ -106,6 +106,8 @@ const HomePage = () => {
       redirect_uri: client.redirect_uri || 'urn:ietf:wg:oauth:2.0:oob',
       state: stateBase64,
       scope: SCOPES.join(' '),
+      access_type: 'offline',
+      prompt: 'consent',
     });
     setAuthUrl(_authUrl);
     return _authUrl;

@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-google-drive",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Add service for upload file to Google Drive",
   "strapi": {
     "name": "google-drive",
